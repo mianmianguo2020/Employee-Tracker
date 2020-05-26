@@ -1,50 +1,57 @@
-const cTable = require('console.table');
-const connnection = require("./db/connection")
+const connection = require("./db/connection")
 
 
 var orm = {
-   table:[], 
-
-    viewAll: function() {
+    viewAll: function(callback) {
     var queryString = `SELECT employee.id,employee.first_name,employee.last_name,title,department,salary,CONCAT(employeeManager.first_name,' ',employeeManager.last_name) AS manager 
     FROM employee 
     JOIN role ON employee.role_id = role.id 
     JOIN department ON role.department_id = department.id 
     LEFT JOIN employee AS employeeManager ON employee.manager_id = employeeManager.id`;
 
-    connnection.query(queryString, 
-    function (err,result) {
-      if(err) throw err;
-      console.table("\n");
-      console.table(result);
-      this.table= result;
-      // console.log(this.table)  
-    })  
+    connection.query(queryString, callback);
 
     },
-
-    viewByDept: function(department,answer.Deptname) {
-      var queryString = `SELECT employee.id,employee.first_name,employee.last_name,title,department,salary,CONCAT(employeeManager.first_name,' ',employeeManager.last_name) AS manager 
+    getDepartments: function(callback) {
+      const queryString = `SELECT department FROM department`;
+      connection.query(queryString, callback);
+    },
+    getEmployeesByDepartment: function(deptName, callback) {
+      const queryString = `SELECT employee.id,employee.first_name,employee.last_name,title,department,salary,CONCAT(employeeManager.first_name,' ',employeeManager.last_name) AS manager 
       FROM employee 
       JOIN role ON employee.role_id = role.id 
       JOIN department ON role.department_id = department.id 
       LEFT JOIN employee AS employeeManager ON employee.manager_id = employeeManager.id
-      WHERE department.id  = Sale`;
-
-      connnection.query (queryString,[department,answer.Deptname],
-        function (err,result) {
-          if(err) throw err;
-          console.table("\n");
-          console.table(result);
-          // this.table= result;
-          // console.log(this.table)  
-        })  
-
-
+      WHERE department = ?`;
+      connection.query(queryString, deptName, callback);
     },
-    
-
-    
+    getManagers: function(callback) {
+      const queryString = `SELECT DISTINCT CONCAT(employeeManager.first_name, ?,employeeManager.last_name) AS manager 
+      FROM employee 
+      LEFT JOIN employee AS employeeManager ON employee.manager_id = employeeManager.id
+      WHERE CONCAT(employeeManager.first_name, ?,employeeManager.last_name) IS NOT NULL`;
+      connection.query(queryString, [' ',' '],callback);
+    },
+    getEmployeesByManager: function(managerName, callback) {
+      const queryString = `SELECT employee.id,employee.first_name,employee.last_name,title,department,salary,CONCAT(employeeManager.first_name,' ',employeeManager.last_name) AS manager 
+      FROM employee 
+      JOIN role ON employee.role_id = role.id 
+      JOIN department ON role.department_id = department.id 
+      LEFT JOIN employee AS employeeManager ON employee.manager_id = employeeManager.id
+      WHERE CONCAT(employeeManager.first_name, ? ,employeeManager.last_name) = ?`;
+      connection.query(queryString, [' ', managerName], callback);
+    },
+    getEmployees: function(callback) {
+      const queryString = `SELECT id, CONCAT(first_name, ?,last_name) AS name
+      FROM employee`;
+      connection.query(queryString, [' '], callback)
+    },
+    updateEmployeesManager: function(employeeId, managerId, callback) {
+      const queryString = `UPDATE employee
+      SET manager_id = ?
+      WHERE id = ?`;
+      connection.query(queryString,[managerId, employeeId], callback)
+    }
 }
 
 
