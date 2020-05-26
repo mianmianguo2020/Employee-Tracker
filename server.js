@@ -1,20 +1,64 @@
-var mysql = require("mysql");
-require("dotenv").config();
+const inquirer = require("inquirer");
+const orm = require("./orm");
 
-var connection = mysql.createConnection({
-  host: process.env.HOST,
-  port: 3306,
-  user: "root",
-  password: process.env.password,
-  database: "employee_db"
-});
+// orm.select("employee", "role", "role_id", "id");
 
-connection.connect(function(err) {
-  if (err) {
-    console.error("error connecting: " + err.stack);
-    return;
-  }
-  console.log("connected as id " + connection.threadId);
-});
+const optionList = [
+    "View All Employees",
+    "View All Employees By Department",
+    "View All Employees By Manager",
+    "Add Employee",
+    "Remove Employee",
+    "Update Employee Role",
+    "Update Employee Manager",
+    "Exit"
+ 
+]
 
-module.exports = connection;
+const questionQ = [
+    {
+        type: 'list',
+        name: 'askUser',
+        message: 'What would you like to do ?',
+        choices: optionList,
+    },
+]
+
+userInput()
+
+function userInput() {
+    inquirer
+     .prompt(questionQ).then(res=> {
+         let toDo = res.askUser;
+
+        if (toDo == "View All Employees"){
+            orm.viewAll();
+            userInput()
+        };
+
+        if (toDo == "View All Employees By Department"){
+            orm.select();
+            userInput()
+        }
+
+
+
+
+
+
+        if (toDo == "Exit"){
+           
+        }  
+            
+        // "View All Employees By Department",
+        // "View All Employees By Manager",
+        // "Add Employee",
+        // "Remove Employee",
+        // "Update Employee Role",
+        // "Update Employee Manager",
+
+
+     })
+
+}
+
