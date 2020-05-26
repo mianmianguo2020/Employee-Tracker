@@ -6,7 +6,7 @@ INSERT INTO department (department) VALUES ('Finance');
 
 
 INSERT INTO role (title, department_id, salary) SELECT 'Sales',id,'35000' FROM department WHERE department = 'Sale'  ;
-INSERT INTO role (title, department_id, salary) SELECT 'Sales Manager',id,'60000' FROM department WHERE department = 'Sale'  ;
+INSERT INTO role (title, dep    artment_id, salary) SELECT 'Sales Manager',id,'60000' FROM department WHERE department = 'Sale'  ;
 INSERT INTO role (title, department_id, salary) SELECT 'Software Engineer',id,'40000' FROM department WHERE department = 'Engineering'  ;
 INSERT INTO role (title, department_id, salary) SELECT 'manager',id,'80000' FROM department WHERE department = 'Engineering'  ;
 INSERT INTO role (title, department_id, salary) SELECT 'Lawyer',id,'30000' FROM department WHERE department = 'Legal'  ;
