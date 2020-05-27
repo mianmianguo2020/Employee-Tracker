@@ -16,6 +16,12 @@ var orm = {
       const queryString = `SELECT department FROM department`;
       connection.query(queryString, callback);
     },
+
+    getRoles: function(callback) {
+      const queryString = `SELECT id, title FROM role`;
+      connection.query(queryString, callback);
+    },
+
     getEmployeesByDepartment: function(deptName, callback) {
       const queryString = `SELECT employee.id,employee.first_name,employee.last_name,title,department,salary,CONCAT(employeeManager.first_name,' ',employeeManager.last_name) AS manager 
       FROM employee 
@@ -51,6 +57,12 @@ var orm = {
       SET manager_id = ?
       WHERE id = ?`;
       connection.query(queryString,[managerId, employeeId], callback)
+    },
+    updateEmployeesRole: function(roleId, employeeName, callback) {
+      const queryString = `UPDATE employee
+      SET role_id = ?
+      WHERE id = ?`;
+      connection.query(queryString,[roleId, employeeName], callback)
     }
 }
 

@@ -4,12 +4,12 @@ CREATE DATABASE employee_db;
 USE employee_db;
 
 
-
 CREATE TABLE department
 (
 	id int NOT NULL AUTO_INCREMENT,
 	department varchar(255) NOT NULL,
- 	PRIMARY KEY (id)
+ 
+	PRIMARY KEY (id)
 );
 
 
@@ -20,10 +20,9 @@ CREATE TABLE role
     salary DECIMAL NOT NULL,
     department_id int NOT NULL,
     FOREIGN KEY (department_id)REFERENCES department(id),
+    
 	PRIMARY KEY (id)
 );
-
-
 
 
 CREATE TABLE employee
@@ -33,8 +32,8 @@ CREATE TABLE employee
 	last_name varchar(255) NOT NULL,
 	role_id int NOT NULL,
 	manager_id int ,
-	PRIMARY KEY (id),
-       
-	FOREIGN KEY (role_id)REFERENCES role(id)
-    
-	);
+	    FOREIGN KEY (role_id)REFERENCES role(id),
+		FOREIGN KEY (manager_id)REFERENCES employee (id),
+
+	PRIMARY KEY (id)
+);

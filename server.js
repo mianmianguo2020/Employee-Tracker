@@ -5,7 +5,8 @@ const mainMenuChoices = [
     'View All Employees',
     'View All Employees By Department',
     'View All Employees By Manager',
-    'Update Employee Manager'
+    'Update Employee Manager',
+    'Update Employee Role'
 ]
 
 const mainMenuConfig = [
@@ -99,6 +100,7 @@ function promptMainMenu() {
                             const selectedEmployeeId = employeeIdMap[selectedEmployee];
                             const selectedManagerId = employeeIdMap[selectedManager];
                             orm.updateEmployeesManager(selectedEmployeeId, selectedManagerId, (err, results) => {
+                              
                                 promptMainMenu()
                             })
                         })
@@ -106,6 +108,58 @@ function promptMainMenu() {
                 })
             })
         }
+
+        if (selection == mainMenuChoices[4]) {
+            orm.getEmployees((err, results) => {
+                const employeeIdMap = {}
+                const employees = results.map(element => {
+                    employeeIdMap[element.name] = element.id;
+                    return element.name
+                });
+                // console.log(employees);
+                // console.log(employeeIdMap);
+                const employeeConfig = [{
+                    type: 'list',
+                    name: 'selection', 
+                    message: 'Which employee?',
+                    choices: employees
+                }]
+                inquirer.prompt(employeeConfig).then((results) => {
+                    // console.log(results) 
+                    const selectedEmployee = results.selection
+                    console.log(selectedEmployee) 
+                    orm.getRoles((err,results) => {
+                        if(err) throw err;
+                        console.log(results)
+                        const roleIdMap = {}
+                        const roles = results.map(element => {
+                            roleIdMap[element.title] = element.id;
+                            return element.title
+                        });
+
+                        const roleConfig = [{
+                            type: 'list',
+                            name: 'selection',
+                            message: 'Which role?',
+                            choices: roles
+                        }]
+                        inquirer.prompt(roleConfig).then((result) => {
+                            const selectedRole = result.selection;
+                            const selectedRoleId = roleIdMap[selectedRole];
+                            const selectedEmployeeId = employeeIdMap[selectedEmployee];
+
+                            console.log(selectedRole) 
+
+                            orm.updateEmployeesRole(selectedRoleId, selectedEmployeeId, (err, results) => {
+                            promptMainMenu()
+                            })
+                        })
+                    })
+                })
+            })
+        }
+
+
         })
 }
 
