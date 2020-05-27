@@ -180,7 +180,7 @@ function promptMainMenu() {
             inquirer.prompt(newEmployeeQ).then((results) => {
                 console.log(results)
                 const newEFirstName = results.firstName
-                const newELastName = results.firstName
+                const newELastName = results.lastName
                 orm.getRoles((err, results) => {
                     if (err) throw err;
                     console.log(results)

@@ -64,10 +64,10 @@ var orm = {
       WHERE id = ?`;
       connection.query(queryString,[roleId, employeeName], callback)
     },
-    addEmployee: function([newEFirstName, newELastName,selectedRoleId,selectedManagerId],callback) {
+    addEmployee: function(whatToSecl,callback) {
       const queryString = `INSERT INTO employee (first_name, last_name, role_id, manager_id) 
       VALUES (?, ? , ? , ?) `
-      connection.query(queryString,[newEFirstName, newELastName,selectedRoleId,selectedManagerId], callback)
+      connection.query(queryString,whatToSecl, callback)
 
     }
 }
