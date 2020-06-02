@@ -38,6 +38,13 @@ var orm = {
       WHERE CONCAT(employeeManager.first_name, ?,employeeManager.last_name) IS NOT NULL`;
       connection.query(queryString, [' ',' '],callback);
     },
+    getManagersByDept: function(callback) {
+      const queryString = `SELECT DISTINCT CONCAT(employeeManager.first_name, ?,employeeManager.last_name) AS manager 
+      FROM employee 
+      LEFT JOIN employee AS employeeManager ON employee.manager_id = employeeManager.id
+      WHERE CONCAT(employeeManager.first_name, ?,employeeManager.last_name) IS NOT NULL`;
+      connection.query(queryString, [' ',' '],callback);
+    },
     getEmployeesByManager: function(managerName, callback) {
       const queryString = `SELECT employee.id,employee.first_name,employee.last_name,title,department,salary,CONCAT(employeeManager.first_name,' ',employeeManager.last_name) AS manager 
       FROM employee 

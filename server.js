@@ -7,7 +7,8 @@ const mainMenuChoices = [
     'View All Employees By Manager',
     'Update Employee Manager',
     'Update Employee Role',
-    'Add Employee'
+    'Add Employee',
+    'Delete Employee',
 ]
 
 const mainMenuConfig = [
@@ -236,6 +237,11 @@ function promptMainMenu() {
                 })
 
             })
+        }
+
+
+        if(selection == mainMenuChoices[6]){
+            
         }
 
     })
